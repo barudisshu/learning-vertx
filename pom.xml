@@ -10,6 +10,7 @@
   <version>${revision}${changelist}</version>
   <modules>
     <module>chap01</module>
+    <module>chap02</module>
   </modules>
 
   <properties>
