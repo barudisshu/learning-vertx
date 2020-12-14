@@ -1,4 +1,4 @@
-package info.galudisu;
+package info.galudisu.streamapis;
 
 import java.io.File;
 import java.io.FileInputStream;

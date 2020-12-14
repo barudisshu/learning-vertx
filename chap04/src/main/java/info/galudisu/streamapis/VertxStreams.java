@@ -1,4 +1,4 @@
-package info.galudisu;
+package info.galudisu.streamapis;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.file.AsyncFile;
