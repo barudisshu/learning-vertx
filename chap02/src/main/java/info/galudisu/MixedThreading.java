@@ -41,7 +41,7 @@ public class MixedThreading extends AbstractVerticle {
           vertx.setTimer(
               1_000,
               id -> {
-                logger.info("This si the final countdown");
+                logger.info("This is the final countdown");
                 latch.countDown();
               });
         });

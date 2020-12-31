@@ -27,8 +27,11 @@ public class CollectorService extends AbstractVerticle {
     vertx
         .createHttpServer()
         .requestHandler(this::handleRequest)
+        // Returns a Future<HttpServer>
         .listen(8080)
+        // Called when the server could not be started
         .onFailure(promise::fail)
+        // Called on success
         .onSuccess(
             ok -> {
               System.out.println("http://localhost:8080");
@@ -37,11 +40,15 @@ public class CollectorService extends AbstractVerticle {
   }
 
   private void handleRequest(HttpServerRequest request) {
+    // Compose several futures.
     CompositeFuture.all(fetchTemperature(3000), fetchTemperature(3001), fetchTemperature(3002))
+        // Chain with another asynchronous operation.
         .flatMap(this::sendToSnapshot)
+        // Handle success.
         .onSuccess(
             data ->
                 request.response().putHeader("Content-Type", "application/json").end(data.encode()))
+        // Handle failure.
         .onFailure(
             err -> {
               LOGGER.error("Something went wrong", err);
@@ -59,6 +66,7 @@ public class CollectorService extends AbstractVerticle {
     return webClient
         .post(4000, "localhost", "/")
         .expect(ResponsePredicate.SC_SUCCESS)
+        // Future-based variant
         .sendJson(data)
         .map(response -> data);
   }
