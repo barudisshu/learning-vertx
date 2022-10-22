@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * <img alt="Figure 5.3" src=../../../../../../../../img/Figure_05_03.png" />
  *
- * @author ehcayen
+ * @author galudisu
  */
 public class Intro {
 

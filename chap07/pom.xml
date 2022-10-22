@@ -9,72 +9,61 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>chap06</artifactId>
+  <artifactId>chap07</artifactId>
 
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
+
+    <main.verticle>info.galudisu.kotlin.MainVerticle</main.verticle>
+
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-codegen</artifactId>
-      <classifier>processor</classifier>
-      <scope>provided</scope>
+      <artifactId>vertx-lang-kotlin</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-service-proxy</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-rx-java</artifactId>
-      <version>4.3.4</version>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-rx-java2-gen</artifactId>
-      <scope>provided</scope>
+      <artifactId>vertx-lang-kotlin-coroutines</artifactId>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <annotationProcessors>
-            <annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>
-          </annotationProcessors>
-        </configuration>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-plugin</artifactId>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-      </plugin>
+      <!-- mvn -f chap07/pom.xml clean compile exec:exec -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>${exec-maven-plugin.version}</version>
         <executions>
           <execution>
+            <id>exec</id>
             <goals>
-              <goal>java</goal>
+              <goal>exec</goal>
             </goals>
           </execution>
         </executions>
         <configuration>
-          <mainClass>info.galudisu.RxProxyClient</mainClass>
           <systemProperties>
             <systemProperty>
               <key>vertx.logger-delegate-factory-class-name</key>
               <value>io.vertx.core.logging.SLF4JLogDelegateFactory</value>
             </systemProperty>
           </systemProperties>
+          <executable>java</executable>
+          <commandlineArgs>-cp %classpath io.vertx.core.Launcher run
+            --redeploy=src/**/*.kt,src/**/*.java
+            --on-redeploy="mvn compile"
+            --launcher-class=io.vertx.core.Launcher ${main.verticle}
+          </commandlineArgs>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
 
